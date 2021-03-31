@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "650433558203",
+    "project_id": "zibaragram",
+    "storage_bucket": "zibaragram.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650433558203:android:e0f348259e591a9b0bdb9e",
+        "android_client_info": {
+          "package_name": "com.example.telegram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650433558203-7jmjv1n5ip0n0jqiag8m4grcvb7a3unl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcpbTK8I-w8qVVF_VgrJdhtyFG27_A-EQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650433558203-7jmjv1n5ip0n0jqiag8m4grcvb7a3unl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
