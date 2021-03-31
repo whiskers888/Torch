@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(mBinding.root)
         APP_ACTIVITY = this
         initFirebase()
+        var a = 1
         initUser{
             initFields()
             initFunc()
