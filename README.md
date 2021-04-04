@@ -2,7 +2,9 @@
 
 Неоригинальный(Пока что) мессенджер TORCH
 Мой первый проект на Kotlin, код полностью копируется у youtube-channel "Мобильный разработчик".
+
 Ссылка на его канал - https://www.youtube.com/channel/UCfFAcveqhKDkLt55aphdXjA
+
 Ссылка на его github - https://github.com/petrovyuri
 
 Планируется полная поддержка как минимум для себя, а может далее и в массы.
