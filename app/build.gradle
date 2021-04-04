@@ -55,6 +55,7 @@ dependencies {
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
 
     //Firebase
+    implementation 'com.firebaseui:firebase-ui-database:7.1.1'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.firebase:firebase-database:19.7.0'
     implementation 'com.google.firebase:firebase-storage:19.2.2'
