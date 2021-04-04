@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#C3000000</color>
+    <color name="colorPrimary">#4A4A4A</color>
     <color name="colorPrimaryDark">#E6000000</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorAccentDark">#D1CDCD</color>
+    <color name="colorAccentSmallDark">#EDEDED</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorLightBlue">#B6CBFF</color>
+    <color name="colorLightYellow">#FFE4AE</color>
     <color name="colorGrey">#837E7E</color>
 
     <!-- Material DEFAULT colors -->
