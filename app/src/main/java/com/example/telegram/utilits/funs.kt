@@ -2,13 +2,17 @@ package com.example.telegram.utilits
 
 import android.content.Context
 import android.content.Intent
+import android.provider.ContactsContract
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.telegram.R
+import com.example.telegram.models.CommonModel
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun showToast(message:String){
     Toast.makeText(APP_ACTIVITY,message,Toast.LENGTH_SHORT).show()
@@ -55,4 +59,36 @@ fun ImageView.downloadAndSetImage(url:String){
         .fit()
         .placeholder(R.drawable.default_photo)
         .into(this)
+}
+
+fun initContacts() {
+    if (checkPermission(READ_CONTACTS)){
+        val arrayContacts = arrayListOf<CommonModel>()
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+        cursor?.let {
+            while(it.moveToNext()){
+                val fullName = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val phone = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val newModel = CommonModel()
+                newModel.fullname = fullName
+                newModel.phone = phone.replace(Regex("[\\s,-]"),"")
+
+                arrayContacts.add(newModel)
+            }
+        }
+        cursor?.close()
+        updatePhonesToDatabase(arrayContacts)
+    }
+}
+
+fun String.asTime(): String {
+    val time = Date(this.toLong())
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return timeFormat.format(time)
 }
