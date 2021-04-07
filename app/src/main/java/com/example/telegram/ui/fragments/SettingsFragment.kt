@@ -6,11 +6,15 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import com.example.telegram.R
-import com.example.telegram.activities.RegisterActivity
+import com.example.telegram.database.*
 import com.example.telegram.utilits.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import downloadAndSetImage
 import kotlinx.android.synthetic.main.fragment_settings.*
+import replaceFragment
+import restartActivity
+import showToast
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
@@ -45,7 +49,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             R.id.settings_menu_exit -> {
                 AppStates.updateStates(AppStates.OFFLINE)
                 AUTH.signOut()
-                APP_ACTIVITY.replaceActivity(RegisterActivity())
+                restartActivity()
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeNameFragment())
         }
@@ -63,7 +67,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             && data != null
         ) {
             val uri = CropImage.getActivityResult(data).uri
-            val path = REF_STORAGE_ROOT.child(FOLDER_PROFILE_IMAGE)
+            val path = REF_STORAGE_ROOT.child(
+                FOLDER_PROFILE_IMAGE
+            )
                 .child(CURRENT_UID)
 
             putImageToStorage(uri, path) {

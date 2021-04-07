@@ -6,13 +6,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import asTime
 import com.example.telegram.R
 import com.example.telegram.models.CommonModel
-import com.example.telegram.utilits.CURRENT_UID
-import com.example.telegram.utilits.asTime
+import com.example.telegram.database.CURRENT_UID
 import kotlinx.android.synthetic.main.message_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 

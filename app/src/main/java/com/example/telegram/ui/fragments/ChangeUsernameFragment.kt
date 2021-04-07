@@ -1,14 +1,14 @@
 package com.example.telegram.ui.fragments
 
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import com.example.telegram.MainActivity
 import com.example.telegram.R
+import com.example.telegram.database.*
 import com.example.telegram.utilits.*
 import kotlinx.android.synthetic.main.fragment_change_username.*
+import showToast
 import java.util.*
 
+
+// Фрагмент для изменения username
 class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_username) {
      lateinit var mNewUsername:String
 
@@ -24,8 +24,9 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
         if (mNewUsername.isEmpty()){
             showToast("Поле Username пустое")
         }else {
-            REF_DATABASE_ROOT.child(NODE_USERNAMES)
-                .addListenerForSingleValueEvent(AppValueEventListener{
+            REF_DATABASE_ROOT.child(
+                NODE_USERNAMES
+            ).addListenerForSingleValueEvent(AppValueEventListener{
                     if (it.hasChild(mNewUsername)){
                         showToast("Такой пользователь уже существует")
                     }else changeUsername()
@@ -34,33 +35,14 @@ class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_usern
         }
 
     private fun changeUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(mNewUsername).setValue(CURRENT_UID)
-            .addOnCompleteListener {
+//        Изменение Username в БД
+        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(mNewUsername).setValue(
+            CURRENT_UID
+        ).addOnCompleteListener {
                 if(it.isSuccessful) {
-                    updateCurrentUsername()
+                    updateCurrentUsername(mNewUsername)
                 }
             }
     }
 
-    private fun updateCurrentUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERS).child(CURRENT_UID).child(CHILD_USERNAME)
-            .setValue(mNewUsername)
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    showToast(getString(R.string.toast_data_update))
-                    deleteOldUsername()
-                } else showToast(it.exception?.message.toString())
-            }
-    }
-
-    private fun deleteOldUsername() {
-        REF_DATABASE_ROOT.child(NODE_USERNAMES).child(USER.username).removeValue()
-            .addOnCompleteListener {
-                if (it.isSuccessful){
-                    showToast(getString(R.string.toast_data_update))
-                    fragmentManager?.popBackStack()
-                    USER.username = mNewUsername
-                } else showToast(it.exception?.message.toString())
-            }
-    }
 }
