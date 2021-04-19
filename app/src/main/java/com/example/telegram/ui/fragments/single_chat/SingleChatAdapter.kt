@@ -8,13 +8,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import asTime
 import com.example.telegram.R
-import com.example.telegram.models.CommonModel
 import com.example.telegram.database.CURRENT_UID
+import com.example.telegram.models.CommonModel
 import kotlinx.android.synthetic.main.message_item.view.*
 
 class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder>() {
 
-    private var mlistMessagesCache = emptyList<CommonModel>()
+    private var mlistMessagesCache = mutableListOf<CommonModel>()
 
     class SingleChatHolder(view: View): RecyclerView.ViewHolder(view){
         val blockUserMessage:ConstraintLayout = view.bloc_user_message
@@ -50,9 +50,25 @@ class SingleChatAdapter: RecyclerView.Adapter<SingleChatAdapter.SingleChatHolder
         }
     }
 
-    fun setList(list: List<CommonModel>){
-        mlistMessagesCache = list
-        notifyDataSetChanged()
+
+    fun addItem(
+        item:CommonModel,
+        toBottom:Boolean,
+        onSuccess: () -> Unit
+    ) {
+        if (toBottom) {
+            if (!mlistMessagesCache.contains(item)) {
+                mlistMessagesCache.add(item)
+                notifyItemInserted(mlistMessagesCache.size)
+            }
+        } else{
+            if (!mlistMessagesCache.contains(item)) {
+                mlistMessagesCache.add(item)
+                mlistMessagesCache.sortBy { it.timeStamp.toString()}
+                notifyItemInserted(0)
+            }
+        }
+        onSuccess()
     }
 }
 

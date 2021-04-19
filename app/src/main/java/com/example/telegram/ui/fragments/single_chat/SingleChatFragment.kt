@@ -1,13 +1,17 @@
 package com.example.telegram.ui.fragments.single_chat
 
 import android.view.View
+import android.widget.AbsListView
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.telegram.R
 import com.example.telegram.database.*
 import com.example.telegram.models.CommonModel
 import com.example.telegram.models.UserModel
 import com.example.telegram.ui.fragments.BaseFragment
-import com.example.telegram.utilits.*
+import com.example.telegram.utilits.APP_ACTIVITY
+import com.example.telegram.utilits.AppChildEventListener
+import com.example.telegram.utilits.AppValueEventListener
 import com.google.firebase.database.DatabaseReference
 import downloadAndSetImage
 import kotlinx.android.synthetic.main.activity_main.view.*
@@ -24,33 +28,66 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment(R.layo
     private lateinit var mRefMessages:DatabaseReference
     private lateinit var mAdapter: SingleChatAdapter
     private lateinit var mRecyclerView: RecyclerView
-    private lateinit var mMessagesListener: AppValueEventListener
-
-    private var mListMessages = emptyList<CommonModel>()
+    private lateinit var mMessagesListener: AppChildEventListener
+    private var mCountMessages = 10
+    private var mIsScrolling = false
+    private var mSmoothScrollToPosition = true
+    private lateinit var  mSwipeRefreshLayout: SwipeRefreshLayout
 
 
     override fun onResume() {
         super.onResume()
+        mSwipeRefreshLayout = chat_swipe_refresh
         initToolbar()
         initRecyclerView()
+
 
     }
 
     private fun initRecyclerView() {
         mRecyclerView = chat_recycle_view
         mAdapter = SingleChatAdapter()
-        mRefMessages = REF_DATABASE_ROOT.child(
-            NODE_MESSAGES
-        )
+        mRefMessages = REF_DATABASE_ROOT
+            .child(NODE_MESSAGES)
             .child(CURRENT_UID)
             .child(contact.id)
         mRecyclerView.adapter = mAdapter
-        mMessagesListener = AppValueEventListener { dataSnapshot ->
-            mListMessages = dataSnapshot.children.map { it.getCommonModel() }
-            mAdapter.setList(mListMessages)
-            mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+        mMessagesListener = AppChildEventListener{
+            mAdapter.addItem(it.getCommonModel(),mSmoothScrollToPosition){
+                if (mSmoothScrollToPosition){
+                    mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+                }
+                mSwipeRefreshLayout.isRefreshing = false
+            }
         }
-        mRefMessages.addValueEventListener(mMessagesListener)
+
+        mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (mIsScrolling && dy < 0){
+                    updateData()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+                    mIsScrolling = true
+                }
+
+            }
+        })
+
+        mSwipeRefreshLayout.setOnRefreshListener { updateData() }
+    }
+
+    private fun updateData() {
+        mSmoothScrollToPosition = false
+        mIsScrolling = false
+        mCountMessages += 10
+        mRefMessages.removeEventListener(mMessagesListener)
+        mRefMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
     }
 
     private fun initToolbar() {
@@ -65,6 +102,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment(R.layo
         ).child(contact.id)
         mRefUser.addValueEventListener(mListenerInfoToolbar)
         chat_btn_send_message.setOnClickListener {
+            mSmoothScrollToPosition = true
             val message = chat_input_message.text.toString()
             if (message.isEmpty()) {
                 showToast(" Введите сообщение")
