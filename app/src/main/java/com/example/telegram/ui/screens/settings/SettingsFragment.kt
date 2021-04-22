@@ -1,4 +1,4 @@
-package com.example.telegram.ui.fragments
+package com.example.telegram.ui.screens.settings
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import com.example.telegram.R
 import com.example.telegram.database.*
+import com.example.telegram.ui.screens.BaseFragment
 import com.example.telegram.utilits.*
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -39,7 +40,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     private fun changePhotoUser() {
         CropImage.activity()
             .setAspectRatio(1,1)
-            .setRequestedSize(600,600)
+            .setRequestedSize(250,250)
             .setCropShape(CropImageView.CropShape.OVAL)
             .start(APP_ACTIVITY,this)
     }
@@ -61,6 +62,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        Активность которая запускается для получения картинки для фото пользователя
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE
             && resultCode == RESULT_OK
@@ -72,7 +74,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             )
                 .child(CURRENT_UID)
 
-            putImageToStorage(uri, path) {
+            putFileToStorage(uri, path) {
                 getUrlFromStorage(path) {
                     putUrlToDatabase(it) {
                         settings_user_photo.downloadAndSetImage(it)

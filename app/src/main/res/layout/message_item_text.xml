@@ -6,9 +6,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bloc_user_message"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_marginStart="100dp"
         android:background="@drawable/bg_user_message"
@@ -43,6 +43,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bloc_received_message"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_marginEnd="100dp"
         android:background="@drawable/bg_receiving_message"
@@ -73,4 +74,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chat_received_message"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
