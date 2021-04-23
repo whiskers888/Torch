@@ -14,9 +14,8 @@ import com.example.telegram.database.*
 import com.example.telegram.models.CommonModel
 import com.example.telegram.models.UserModel
 import com.example.telegram.ui.message_recycler_view.views.AppViewFactory
-import com.example.telegram.ui.screens.BaseFragment
+import com.example.telegram.ui.screens.base.BaseFragment
 import com.example.telegram.ui.screens.main_list.MainListFragment
-import com.example.telegram.ui.screens.settings.ChangeNameFragment
 import com.example.telegram.utilits.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.database.DatabaseReference
@@ -204,7 +203,7 @@ class SingleChatFragment(private val contact: CommonModel) : BaseFragment(R.layo
                 TYPE_TEXT
             ) {
                 saveToMainList(contact.id, TYPE_CHAT)
-                chat_input_message.setText("")
+                chat_input_message.setText(" ")
             }
         }
     }
